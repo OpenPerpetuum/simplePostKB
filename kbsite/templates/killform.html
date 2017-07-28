@@ -1,0 +1,25 @@
+{%extends "base.html"%}
+{%block nav%}
+{%include 'nav.html'%}
+{%endblock%}
+
+{%block content%}
+
+
+<div class="row">
+	<div class = "col-xs-12 text-center">
+
+		<form method="post" action="/postkill">
+			{% csrf_token %}
+		    {{ formset }}
+		   <button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+
+	</div>
+</div>
+
+
+{% load staticfiles %}
+
+
+{%endblock%}
