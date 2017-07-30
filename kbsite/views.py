@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.exceptions import ObjectDoesNotExist
 from forms import KillForm, KillFormText
 import models
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -19,20 +20,16 @@ def home(request, pagenum=0):
 
 def postkill(request):
     form = KillFormText()
-    modelform = KillForm()
     if request.method == "GET":
-        return render(request, "killform.html", {"formset": form, "modelform": modelform})
+        return render(request, "killform.html", {"formset": form})
     elif request.method == 'POST':
-        print request.POST
         d = request.POST
-        saveData(d)
-        walkDict(d, printdata)
-        modelform = KillForm(request.POST)
-        print modelform
-        if modelform.is_valid():
-            modelform.save()
-        return render(request, "killform.html", {"formset": form, "modelform": modelform, "success": True})
-    return render(request, "killform.html", {"formset": form, "modelform": modelform, "success": False})
+        try:
+            saveData(d)
+        except:
+            return JsonResponse({"Success":False})
+        return JsonResponse({"Success": True})
+    return render(request, "killform.html", {"formset": form})
 
 
 def saveData(d):

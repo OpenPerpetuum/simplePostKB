@@ -10,25 +10,15 @@
 
 <div class="row">
 	<div class = "col-xs-12 text-center">
-	<!--
-		<form method="post" action="/postkill">
+	<div class="row" id="success">
+	</div>
+	<div class="row card">
+		<form class="card" id="killform" method="post" action="/postkill">
 			{% csrf_token %}
 		    {{ formset }}
 		   <button type="submit" class="btn btn-primary">Submit</button>
 		</form>
--->
-		<form id="killform" method="post" action="/postkill">
-			{% csrf_token %}
-		    {{ formset }}
-		   <button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-
-		<form id="previewform" method="post" action="/postkill">
-			{% csrf_token %}
-		    {{ modelform }}
-		   <button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-
+		</div>
 	</div>
 </div>
 
@@ -41,8 +31,19 @@ $("#killform").submit(function(e){
 	var out = parseContent(content);
 	console.log(out);
 	out["csrfmiddlewaretoken"] = '{{ csrf_token }}' ; 
-	$.post("/postkill", out);
+	$.post("/postkill", out, onSuccess);
 });
+
+function onSuccess(data){
+	if(data.Success){
+		$("#id_content")[0].value = "";
+		$("#success")[0].innerHTML = "Kill Mail Posted!"
+	}else{
+		$("#success")[0].innerHTML = "FAILURE!"
+		$("#id_content")[0].value = "";
+	}
+	console.log(data);
+}
 
 function findNextEmptyLine(lines, currentindex){
 	for(var i=currentindex; i<lines.length; i++){
