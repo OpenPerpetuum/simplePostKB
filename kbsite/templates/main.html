@@ -10,13 +10,33 @@
 	<div class = "col-xs-12 text-center">
 	{% if kills %}
 		{% for kill in kills %}
-			<div class="row">
-			{{kill.id}}<br>
-			{{kill.content}}<br>
+			<div class="row card hover">
+			Date: {{kill.date}}<br>
+			Zone: {{kill.zone}}<br>
+			Victim: {{kill.victim_agent}}<br>
+			Robot: {{kill.vicitm_robot}}<br>
+			<br>
+			Attackers:<br>
+			{% for attacker in kill.attackers.all %}
+			<div class="row card hover">
+				Agent: {{attacker.player}}<br>
+				Robot: {{attacker.robot}}<br>
+				Damage: {{attacker.damage}}<br>
+				ECM: {{attacker.ecm_hits}}/{{attacker.ecm_attempts}}<br>
+				Demob: {{attacker.demob}}<br>
+				Sensor Suppression: {{attacker.suppress}}<br>
+				Energy Drain: {{attacker.energy}}<br>
+				{% if attacker.killing_blow %}
+					<b>**Killing Blow!**</b><br>
+				{%endif%}
+				</div>
+			{% endfor %}
+			<br>
 			</div>
 		{%endfor%}
 	{% endif %}
-
+	<div class="row">
+	</div>
 	{% if page > 0 %}
 	<a href="/{{page|add:-1}}" type="button"  class="btn btn-primary">Prev</a>
 

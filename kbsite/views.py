@@ -10,10 +10,10 @@ import models
 def home(request, pagenum=0):
     pagenum = int(pagenum)
     step = 10
-    total = models.Kill_PureText.objects.all().count()
+    total = models.Kill.objects.all().count()
     lower = min(pagenum * step, total)
     upper = min((pagenum + 1) * step, total)
-    kills = models.Kill_PureText.objects.all()[lower:upper]
+    kills = models.Kill.objects.all()[lower:upper]
     return render(request, "main.html", {"kills": kills, "page": pagenum})
 
 
