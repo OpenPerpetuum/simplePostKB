@@ -13,13 +13,15 @@
 			<div class="row card hover">
 			Date: {{kill.date}}<br>
 			Zone: {{kill.zone}}<br>
-			Victim: {{kill.victim_agent}}<br>
+			Victim: {{kill.victim_agent.name}}<br>
+			Corp: {{kill.victim_agent.corp.name}}<br>
 			Robot: {{kill.vicitm_robot}}<br>
 			<br>
 			Attackers:<br>
 			{% for attacker in kill.attackers.all %}
 			<div class="row card hover">
-				Agent: {{attacker.player}}<br>
+				Agent: {{attacker.player.name}}<br>
+				Agent: {{attacker.player.corp.name}}<br>
 				Robot: {{attacker.robot}}<br>
 				Damage: {{attacker.damage}}<br>
 				ECM: {{attacker.ecm_hits}}/{{attacker.ecm_attempts}}<br>
