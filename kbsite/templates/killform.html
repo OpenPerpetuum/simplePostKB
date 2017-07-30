@@ -26,10 +26,8 @@
 $("#killform").submit(function(e){
 	var form = this;
 	e.preventDefault();
-	console.log(e);
 	var content = $("#id_content").val();
 	var out = parseContent(content);
-	console.log(out);
 	out["csrfmiddlewaretoken"] = '{{ csrf_token }}' ; 
 	$.post("/postkill", out, onSuccess);
 });
@@ -42,7 +40,6 @@ function onSuccess(data){
 		$("#success")[0].innerHTML = "FAILURE!"
 		$("#id_content")[0].value = "";
 	}
-	console.log(data);
 }
 
 function findNextEmptyLine(lines, currentindex){
@@ -55,8 +52,8 @@ function findNextEmptyLine(lines, currentindex){
 }
 
 function getRangeAsDict(lines, start, end){
-	console.log("parsing from "+ start + " to "+end);
 	var dict = {};
+	var killer = false;
 	for(var i=start; i<end; i++){
 		if(lines[i].includes(":")){
 			var keyval = lines[i].split(":");
@@ -67,13 +64,11 @@ function getRangeAsDict(lines, start, end){
 			dict = lines[i];
 		}
 	}
-	console.log(dict);
 	return dict;
 }
 
 function parseContent(raw){
 	var lines = raw.split("\n");
-	console.log(lines);
 	var kill = {};
 	var dict = {};
 	for(var i=0; i<lines.length; i++){

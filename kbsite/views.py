@@ -26,7 +26,7 @@ def postkill(request):
         d = request.POST
         try:
             saveData(d)
-        except:
+        except Exception, e:
             return JsonResponse({"Success":False})
         return JsonResponse({"Success": True})
     return render(request, "killform.html", {"formset": form})
@@ -42,48 +42,41 @@ def saveData(d):
             if getNum > maxAttackers:
                 maxAttackers = getNum
     attackers = [{} for x in xrange(maxAttackers)]
-    print attackers
 
     for key in d:
-        print key, d[key]
         if "Date" in key:
             kill.date = d[key]
-
-        if "Zone" in key:
+        elif "Zone" in key:
             zone, success = models.Zone.objects.get_or_create(name=d[key])
             zone.save()
             kill.zone = zone
-
-        if "Victim" in key:
+        elif "Victim" in key:
             if "Agent" in key:
                 victimPlayer["Agent"] = d[key]
-            if "Corp" in key:
+            elif "Corp" in key:
                 victimPlayer["Corp"] = d[key]
-            if "Robot" in key:
+            elif "Robot" in key:
                 victimPlayer["Robot"] = d[key]
-
         elif "Attacker " in key:
             getNum = int(key.replace("Attacker ", "").split("[")[0]) - 1
             if "Agent" in key:
                 attackers[getNum]["Agent"] = d[key]
-            if "Corp" in key:
+            elif "Corp" in key:
                 attackers[getNum]["Corp"] = d[key]
-            if "Robot" in key:
+            elif "Robot" in key:
                 attackers[getNum]["Robot"] = d[key]
-            if "Damage" in key:
+            elif "Damage" in key:
                 attackers[getNum]["Damage"] = d[key]
-            if "ECM" in key:
+            elif "ECM" in key:
                 attackers[getNum]["ECM"] = d[key]
-            if "Demob" in key:
+            elif "Demob" in key:
                 attackers[getNum]["Demob"] = d[key]
-            if "Sensor" in key:
+            elif "Sensor" in key:
                 attackers[getNum]["Sensor"] = d[key]
-            if "Energy" in key:
+            elif "Energy" in key:
                 attackers[getNum]["Energy"] = d[key]
-
-    print "-------------"
-    print attackers
-    print "--------------"
+            elif "Killing blow" in key:
+                attackers[getNum]["Killer"] = d[key]
 
     attackDetailSet = set()
     for attacker in attackers:
@@ -93,11 +86,11 @@ def saveData(d):
         agent.save()
         robot, success = models.Robot.objects.get_or_create(name=attacker["Robot"])
         robot.save()
-
+        killer = "Killer" in attacker
         ecmSplit = attacker["ECM"].split("/")
         dmgNum = attacker["Damage"].split(" HP")[0]
         attackDetails, success = models.AttackDetails.objects.get_or_create(player=agent, robot=robot, damage=dmgNum,
-                                                                            killing_blow=False,
+                                                                            killing_blow=killer,
                                                                             ecm_hits=ecmSplit[0],
                                                                             ecm_attempts=ecmSplit[1],
                                                                             demob=attacker["Demob"],
