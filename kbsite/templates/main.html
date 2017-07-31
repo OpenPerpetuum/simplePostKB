@@ -15,14 +15,14 @@
 			Zone: {{kill.zone}}<br>
 			Victim: {{kill.victim_agent.name}}<br>
 			Corp: {{kill.victim_agent.corp.name}}<br>
-			Robot: {{kill.vicitm_robot.name}}<br>
+			Robot: {{kill.victim_robot.name}}<br>
 			<br>
 			Attackers:<br>
 			{% for attacker in kill.attackers.all %}
 			<div class="row card hover">
 				Agent: {{attacker.player.name}}<br>
-				Agent: {{attacker.player.corp.name}}<br>
-				Robot: {{attacker.robot}}<br>
+				Corp: {{attacker.player.corp.name}}<br>
+				Robot: {{attacker.robot.name}}<br>
 				Damage: {{attacker.damage}}<br>
 				ECM: {{attacker.ecm_hits}}/{{attacker.ecm_attempts}}<br>
 				Demob: {{attacker.demob}}<br>
